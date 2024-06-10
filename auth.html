@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spotify Callback</title>
+</head>
+<body>
+  <script>
+    (function() {
+      // Get the access token from the URL hash
+      const hash = window.location.hash
+        .substring(1)
+        .split("&")
+        .reduce((initial, item) => {
+          if (item) {
+            const parts = item.split("=");
+            initial[parts[0]] = decodeURIComponent(parts[1]);
+          }
+          return initial;
+        }, {});
+
+      // Ensure the opener exists and post message
+      if (window.opener) {
+        window.opener.postMessage(hash, "*");  // use * for testing; change to specific origin in production
+        window.close();
+      } else {
+        console.error("No opener window found.");
+      }
+    })();
+  </script>
+</body>
+</html>
